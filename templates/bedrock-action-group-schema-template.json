@@ -1,0 +1,61 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Security Action Group API",
+    "version": "1.0.0",
+    "description": "API for security operations"
+  },
+  "paths": {
+    "/check-security-status": {
+      "post": {
+        "summary": "Check security status of AWS resources",
+        "description": "Retrieves security findings and compliance status",
+        "operationId": "checkSecurityStatus",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "resourceType": {
+                    "type": "string",
+                    "description": "Type of AWS resource (e.g., ec2, s3, iam)"
+                  },
+                  "resourceId": {
+                    "type": "string",
+                    "description": "Resource identifier"
+                  }
+                },
+                "required": ["resourceType"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "findings": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

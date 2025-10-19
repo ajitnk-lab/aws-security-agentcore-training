@@ -1,0 +1,248 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Security Chatbot Action Group API",
+    "version": "1.0.0",
+    "description": "API for checking AWS security services, findings, encryption, and network security"
+  },
+  "paths": {
+    "/check-security-status": {
+      "post": {
+        "summary": "Check status of AWS security services",
+        "description": "Use this operation when the user asks about security service status, enabled services, or wants to check if security services like GuardDuty, Security Hub, Inspector, Access Analyzer, Trusted Advisor, or Macie are enabled in a region. Examples: 'check security status', 'are security services enabled', 'what security services are running', 'check GuardDuty status'.",
+        "operationId": "checkSecurityStatus",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "region": {
+                    "type": "string",
+                    "description": "AWS region to check (e.g., us-east-1, us-west-2). If user mentions a region name like 'Virginia', map to 'us-east-1'. If not specified, use 'us-east-1'."
+                  },
+                  "service": {
+                    "type": "string",
+                    "description": "Specific security service to check. Options: guardduty, inspector, accessanalyzer, securityhub, trustedadvisor, macie. If not specified, all services will be checked."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Security services status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "services": {
+                      "type": "array",
+                      "description": "List of security services and their status"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/get-security-findings": {
+      "post": {
+        "summary": "Get security findings from AWS security services",
+        "description": "Use this operation when the user asks about security findings, vulnerabilities, issues, alerts, or threats from security services. Examples: 'show me security findings', 'what are the high severity issues', 'get GuardDuty findings', 'show critical vulnerabilities', 'what security issues do I have'.",
+        "operationId": "getSecurityFindings",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "region": {
+                    "type": "string",
+                    "description": "AWS region to check. Default: us-east-1"
+                  },
+                  "service": {
+                    "type": "string",
+                    "description": "Security service to get findings from. REQUIRED. Options: guardduty, securityhub, inspector, accessanalyzer, trustedadvisor, macie"
+                  },
+                  "severity": {
+                    "type": "string",
+                    "description": "Filter by severity. Options: CRITICAL, HIGH, MEDIUM, LOW. For Trusted Advisor use: ERROR, WARNING. If not specified, returns all severities."
+                  },
+                  "maxFindings": {
+                    "type": "string",
+                    "description": "Maximum number of findings to return. Default: 100"
+                  }
+                },
+                "required": ["service"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Security findings",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "findings": {
+                      "type": "array",
+                      "description": "List of security findings"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/check-storage-encryption": {
+      "post": {
+        "summary": "Check encryption status of storage services",
+        "description": "Use this operation when the user asks about storage encryption, unencrypted resources, or wants to check if S3 buckets, EBS volumes, RDS databases, DynamoDB tables, EFS file systems, or ElastiCache clusters are encrypted. Examples: 'check storage encryption', 'are my S3 buckets encrypted', 'show unencrypted volumes', 'check database encryption', 'find unencrypted resources'.",
+        "operationId": "checkStorageEncryption",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "region": {
+                    "type": "string",
+                    "description": "AWS region to check. Default: us-east-1"
+                  },
+                  "services": {
+                    "type": "string",
+                    "description": "Storage services to check. Can be comma-separated list. Options: s3, ebs, rds, dynamodb, efs, elasticache. If not specified, checks all storage services."
+                  },
+                  "unencryptedOnly": {
+                    "type": "string",
+                    "description": "Set to 'true' to show only unencrypted resources. Default: false"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Storage encryption status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resources": {
+                      "type": "array",
+                      "description": "List of storage resources and encryption status"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/check-network-security": {
+      "post": {
+        "summary": "Check network security configuration",
+        "description": "Use this operation when the user asks about network security, load balancer security, VPC security, API Gateway security, CloudFront security, or wants to check for insecure network configurations. Examples: 'check network security', 'are my load balancers secure', 'check VPC security', 'show non-compliant network resources', 'check API Gateway security'.",
+        "operationId": "checkNetworkSecurity",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "region": {
+                    "type": "string",
+                    "description": "AWS region to check. Default: us-east-1"
+                  },
+                  "services": {
+                    "type": "string",
+                    "description": "Network services to check. Can be comma-separated list. Options: elb, vpc, apigateway, cloudfront. If not specified, checks all network services."
+                  },
+                  "nonCompliantOnly": {
+                    "type": "string",
+                    "description": "Set to 'true' to show only non-compliant resources. Default: false"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Network security status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resources": {
+                      "type": "array",
+                      "description": "List of network resources and security status"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/list-services-in-region": {
+      "post": {
+        "summary": "List available security services in a region",
+        "description": "Use this operation when the user asks what security services are available in a region, or wants to know which services can be checked. Examples: 'what security services are available', 'list services in us-west-2', 'what can you check'.",
+        "operationId": "listServicesInRegion",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "region": {
+                    "type": "string",
+                    "description": "AWS region to check. Default: us-east-1"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Available services",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "services": {
+                      "type": "array",
+                      "description": "List of available security services"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
