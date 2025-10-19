@@ -44,7 +44,7 @@
 - **Runtime**: Python 3.9
 - **Role**: `GatewayProxyLambdaRole`
 
-### **7. AgentCore Gateway **
+### **7.  **
 - **Gateway URL**: `https://security-chatbot-gateway-41f3cc60-fmqz5lmy6j.gateway.bedrock-agentcore.us-east-1.amazonaws.com/mcp`
 - **Gateway ID**: `security-chatbot-gateway-41f3cc60-fmqz5lmy6j`
 - **OAuth Client ID**: `6aarhftf6bopppar05humcp2r6`
